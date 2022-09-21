@@ -1,13 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+
+import { Routes } from './src/routes' 
 
 export default function App() {
   return (
     <View style={styles.container}>
       <StatusBar style="light" translucent={false} />
-      <Text>Open up App.js to start working on your app!</Text>
+      <Routes />
     </View>
-  );
+  ); 
 }
 
 const styles = StyleSheet.create({
