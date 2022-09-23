@@ -40,10 +40,12 @@ export function Search() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#D5E1F1'
   },
   header: {
     width: '100%',
+    maxHeight: 85,
     borderBottom: 1, 
     marginBottom: 20, 
     backgroundColor: '#0A1823'

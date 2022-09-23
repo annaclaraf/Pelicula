@@ -17,10 +17,10 @@ export function Home() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    backgroundColor: '#D5E1F1'
   },
   header: {
-    flex: 1,
     backgroundColor: '#0A1823',
     height: 85, 
     justifyContent: 'center',
