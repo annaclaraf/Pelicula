@@ -11,11 +11,13 @@ export function RelatedMovies({ movieId }) {
       let response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/recommendations?api_key=17830acb428fca194205745d95c40ae4&language=pt-BR`, { method: "GET" })
         .then((res) => res.json())
         .then((res) => res.results)
+        .then((res) => res && (res.filter(movie => movie.overview && movie.poster_path)));
 
       if (response.length == 0) {
         response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}/similar?api_key=17830acb428fca194205745d95c40ae4&language=pt-BR`, { method: "GET" })
           .then((res) => res.json())
           .then((res) => res.results)
+          .then((res) => res && (res.filter(movie => movie.overview && movie.poster_path)));
       }
 
       setData(response)
