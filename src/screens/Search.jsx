@@ -40,8 +40,7 @@ export function Search() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#D5E1F1'
+    flex: 1
   },
   header: {
     width: '100%',

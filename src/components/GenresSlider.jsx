@@ -52,7 +52,7 @@ export function GenresSlider() {
         showsHorizontalScrollIndicator={false}
         horizontal 
         style={styles.list} />
-      <MovieSlider data={data} />
+      <MovieSlider data={data} style={{paddingHorizontal: 10}} />
     </View>
   )
 }
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     borderWidth: 1, 
     borderRadius: 30, 
     borderColor: '#0A1823',
-    backgroundColor: '#D5E1F1',
+    backgroundColor: 'transparent',
   },
   contentSelected: {
     backgroundColor: '#E82251',

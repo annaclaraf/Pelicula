@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Image, FlatList, StyleSheet, Pressable } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
-export function MovieSlider({ data }) {
+export function MovieSlider({ data, style }) {
   const navigation = useNavigation();
 
   const renderItem = ({ item }) => {
@@ -21,7 +21,7 @@ export function MovieSlider({ data }) {
         renderItem={renderItem}
         showsHorizontalScrollIndicator={false}
         horizontal
-        style={styles.list}
+        style={style}
       />
     </View>
   );
@@ -31,15 +31,13 @@ const styles = StyleSheet.create({
   content: {
     height: 200,
     borderRadius: 10,
-    margin: 5,
+    marginRight: 10,
+    marginVertical: 5,
     overflow: "hidden"
   },
   image: {
     width: 140, 
     height: "100%", 
     resizeMode: 'cover'
-  },
-  list: {
-    paddingHorizontal: 5
   }
 });

@@ -21,7 +21,7 @@ export function UpcomingMovies() {
   return (
     <View>
       <Text style={styles.title}>Lançamentos</Text>
-      <MovieSlider data={data} />
+      <MovieSlider data={data} style={{paddingHorizontal: 10}} />
     </View>
   )
 }

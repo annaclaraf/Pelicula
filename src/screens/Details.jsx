@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   },
   content: {
     marginTop: -50, 
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F2F2F2',
     borderTopLeftRadius: 50, 
     borderTopRightRadius: 50, 
     padding: 30

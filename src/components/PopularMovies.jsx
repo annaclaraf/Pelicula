@@ -21,7 +21,7 @@ export function PopularMovies() {
   return (
     <View>
       <Text style={styles.title}>Populares</Text>
-      <MovieSlider data={data} />
+      <MovieSlider data={data} style={{paddingHorizontal: 10}}/>
     </View>
   )
 }

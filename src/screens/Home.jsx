@@ -29,8 +29,7 @@ export function Home() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#D5E1F1'
+    flex: 1
   },
   header: {
     backgroundColor: '#0A1823',
@@ -46,7 +45,7 @@ const styles = StyleSheet.create({
     flex: 1
   },
   banner: {
-    margin: 20, borderRadius: 10, overflow: 'hidden', backgroundColor: 'red'
+    margin: 20, borderRadius: 10, overflow: 'hidden'
   },
   bannerImg: {
     width: '100%', height: 220, resizeMode: 'cover'
