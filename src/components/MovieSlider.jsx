@@ -1,9 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Image, FlatList, StyleSheet, Pressable } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
+import { Loading } from './Loading'
+
 export function MovieSlider({ data, style }) {
   const navigation = useNavigation();
+
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true)
+    setMovies(data)
+    setTimeout(() => {
+      setLoading(false)
+    }, 1000);
+  }, [data]);
+
 
   const renderItem = ({ item }) => {
     const movieId = item.id
@@ -15,15 +29,16 @@ export function MovieSlider({ data, style }) {
   };
 
   return (
-    <View>
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        showsHorizontalScrollIndicator={false}
-        horizontal
-        style={style}
-      />
-    </View>
+    loading ? <Loading/> : 
+      <View>
+        <FlatList
+          data={movies}
+          renderItem={renderItem}
+          showsHorizontalScrollIndicator={false}
+          horizontal
+          style={style}
+        />
+      </View>
   );
 }
 
