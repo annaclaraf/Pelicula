@@ -54,9 +54,9 @@ export function Profile() {
 
           <View>
             <Text style={styles.title}>Filmes Assistidos</Text>
-            <MovieSlider data={moviesData} style={{ paddingHorizontal: 10 }} />
+            <MovieSlider data={moviesData} style={{ paddingHorizontal: 10 }} viewMoreMovies={true} title={'Filmes Assistidos'} />
             <Text style={styles.title}>Filmes Para Assistir</Text>
-            <MovieSlider data={moviesData} style={{ paddingHorizontal: 10 }} />
+            <MovieSlider data={moviesData} style={{ paddingHorizontal: 10 }} viewMoreMovies={true} title={'Filmes Para Assistir'} />
           </View>
         </View>
       </ScrollView>

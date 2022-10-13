@@ -3,8 +3,9 @@ import { View, Image, FlatList, StyleSheet, Pressable } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import { Loading } from './Loading'
+import { ListFooter } from '../components/ListFooter'
 
-export function MovieSlider({ data, style }) {
+export function MovieSlider({ data, style, viewMoreMovies, title }) {
   const navigation = useNavigation();
 
   const [movies, setMovies] = useState([]);
@@ -32,9 +33,10 @@ export function MovieSlider({ data, style }) {
     loading ? <Loading/> : 
       <View>
         <FlatList
-          data={movies}
+          data={viewMoreMovies ? movies.slice(0, 8) : movies}
           renderItem={renderItem}
           showsHorizontalScrollIndicator={false}
+          ListFooterComponent={viewMoreMovies && <ListFooter data={movies} title={title} />}
           horizontal
           style={style}
         />
