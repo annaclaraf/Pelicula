@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigation } from '@react-navigation/native'
-import { View, Alert, Pressable, StyleSheet } from 'react-native';
+import { View, Pressable, StyleSheet } from 'react-native';
 import { House, MagnifyingGlass, User } from 'phosphor-react-native'
 
 export function Footer() {
@@ -8,13 +8,13 @@ export function Footer() {
 
   return (
     <View style={styles.container}>
-      <Pressable onPress={() => navigation.navigate('home')}>
+      <Pressable onPress={() => navigation.push('home')}>
         <House color="#FFFFFF" size={26} />
       </Pressable>
-      <Pressable onPress={() => navigation.navigate('search')}>
+      <Pressable onPress={() => navigation.push('search')}>
         <MagnifyingGlass color="#FFFFFF" size={26} />
       </Pressable>
-      <Pressable onPress={() => { Alert.alert('Test', 'Profile') }}>
+      <Pressable onPress={() => navigation.push('profile')}>
         <User color="#FFFFFF" size={26} />
       </Pressable>
     </View>
