@@ -10,13 +10,24 @@ export function MovieSlider({ data, style, viewMoreMovies, title }) {
 
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(0);
+  const moviesData = viewMoreMovies ? data.slice(0,8) : data
+
+  async function loadMovies(pagination = page) {
+    const response = await moviesData.slice(pagination, pagination+4)
+    setMovies(movies => [...movies, ...response]);
+
+    setPage(pagination+4)
+
+    setTimeout(() => {
+      setLoading(false)
+    }, 200);
+  }
 
   useEffect(() => {
     setLoading(true)
-    setMovies(data)
-    setTimeout(() => {
-      setLoading(false)
-    }, 1000);
+    setMovies([])
+    loadMovies(0)
   }, [data]);
 
 
@@ -33,10 +44,12 @@ export function MovieSlider({ data, style, viewMoreMovies, title }) {
     loading ? <Loading/> : 
       <View>
         <FlatList
-          data={viewMoreMovies ? movies.slice(0, 8) : movies}
+          data={movies}
           renderItem={renderItem}
           showsHorizontalScrollIndicator={false}
-          ListFooterComponent={viewMoreMovies && <ListFooter data={movies} title={title} />}
+          ListFooterComponent={viewMoreMovies && movies.length == 8 && <ListFooter data={data} title={title} />}
+          onEndReachedThreshold={0.1}
+          onEndReached={() => loadMovies()}
           horizontal
           style={style}
         />
