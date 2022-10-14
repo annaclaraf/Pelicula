@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Image, FlatList, Text, StyleSheet, Pressable } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient';
@@ -9,6 +9,9 @@ export function ListAllMovies() {
   const route = useRoute()
   const { movies, title } = route.params
 
+  const [allMovies, setAllMovies] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
   const renderItem = ({ item }) => {
     const movieId = item.id
     return (
@@ -18,18 +21,36 @@ export function ListAllMovies() {
     );
   };
 
+  const loadMovies = () => {
+    setAllMovies(movies)
+  }
+
+  const refreshList = () => {
+    setRefreshing(true);
+    loadMovies();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 500);
+  }
+
+  useEffect(() => {
+    loadMovies()
+  }, [movies])
+
   return (
     <>
       <LinearGradient colors={['#FFFFFF99', '#FFFFFF00']} style={styles.header}>
         <Pressable onPress={() => navigation.goBack()} style={styles.icon}><CaretLeft size={30} /></Pressable>
         <Text style={styles.title}>{title}</Text>
       </LinearGradient>
-
+      
       <View style={styles.container}>
         <FlatList
-          data={movies}
+          data={allMovies}
           renderItem={renderItem}
           numColumns={3}
+          onRefresh={refreshList}
+          refreshing={refreshing}
         />
       </View>
     </>
