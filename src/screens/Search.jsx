@@ -9,6 +9,22 @@ export function Search() {
   const [movie, setMovie] = useState('')
   const [data, setData] = useState([])
 
+  const noResultsFound = () => {
+    return (
+      <View style={styles.messageContainer}>
+        <Text style={styles.message}>Nenhum filme encontrado</Text>
+      </View>
+    )
+  }
+
+  const searchForAMovie = () => {
+    return (
+      <View style={styles.messageContainer}>
+        <Text style={styles.message}>Busque por um filme</Text>
+      </View>
+    )
+  }
+
   useEffect(() => {
     (async () => {
       const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=17830acb428fca194205745d95c40ae4&language=pt-BR&query=${movie}&page=1&include_adult=false`, { method: "GET" })
@@ -31,7 +47,7 @@ export function Search() {
         </View>
       </View>
       <View style={styles.content}>
-        <MovieList data={data} />
+        {!movie ? searchForAMovie() : data && data.length == 0 ? noResultsFound() : <MovieList data={data} /> }
       </View>
       <Footer selected={'search'} />
     </View>
@@ -64,5 +80,13 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1
+  },
+  messageContainer: {
+    flex: 1, 
+    alignItems: 'center', 
+    justifyContent: 'center'
+  },
+  message: {
+    color: 'gray'
   }
 });
