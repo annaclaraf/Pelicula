@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, ScrollView, ImageBackground } from 'react-native'
+import { View, StyleSheet, ScrollView, ImageBackground, Image } from 'react-native'
 
 import { Footer } from '../components/Footer'
 import { GenresSlider } from '../components/GenresSlider'
@@ -9,7 +9,7 @@ export function Home() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.logo}>Película</Text>
+        <Image style={styles.logo} source={{ uri: 'https://cdn.discordapp.com/attachments/901295847793360909/1030773806102482944/20221015_061053_0002-removebg-preview.png' }}  />
       </View>
       <ScrollView>
         <View style={styles.content}>
@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   logo: {
-    color: 'white',
-    fontSize: 20
+    width: 250, 
+    height: 50
   },
   content: {
     flex: 1
