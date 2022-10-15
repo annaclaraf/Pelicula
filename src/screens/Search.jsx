@@ -33,7 +33,7 @@ export function Search() {
       <View style={styles.content}>
         <MovieList data={data} />
       </View>
-      <Footer />
+      <Footer selected={'search'} />
     </View>
   )
 }

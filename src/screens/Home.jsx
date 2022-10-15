@@ -22,7 +22,7 @@ export function Home() {
           <PopularMovies />
         </View>
       </ScrollView>
-      <Footer />
+      <Footer selected={'home'} />
     </View>
   )
 }

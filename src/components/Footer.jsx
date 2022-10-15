@@ -1,22 +1,34 @@
 import React from 'react';
 import { useNavigation } from '@react-navigation/native'
-import { View, Pressable, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import { House, MagnifyingGlass, User } from 'phosphor-react-native'
 
-export function Footer() {
+export function Footer({selected}) {
   const navigation = useNavigation()
 
   return (
     <View style={styles.container}>
-      <Pressable onPress={() => navigation.push('home')}>
-        <House color="#FFFFFF" size={26} />
-      </Pressable>
-      <Pressable onPress={() => navigation.push('search')}>
-        <MagnifyingGlass color="#FFFFFF" size={26} />
-      </Pressable>
-      <Pressable onPress={() => navigation.push('profile')}>
-        <User color="#FFFFFF" size={26} />
-      </Pressable>
+      <TouchableOpacity onPress={() => navigation.push('home')}>
+        <House 
+          color="#FFFFFF" 
+          size={26} 
+          weight={selected == 'home' ? 'fill' : 'light' }
+        />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.push('search')}>
+        <MagnifyingGlass 
+          color="#FFFFFF" 
+          size={26} 
+          weight={selected == 'search' ? 'fill' : 'light' }
+        />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.push('profile')}>
+        <User 
+          color="#FFFFFF" 
+          size={26} 
+          weight={selected == 'profile' ? 'fill' : 'light' }
+        />
+      </TouchableOpacity>
     </View>
   );
 }

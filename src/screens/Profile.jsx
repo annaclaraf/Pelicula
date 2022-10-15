@@ -60,7 +60,7 @@ export function Profile() {
           </View>
         </View>
       </ScrollView>
-      <Footer />
+      <Footer selected={'profile'} />
     </>
   );
 }
