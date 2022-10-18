@@ -9,7 +9,7 @@ export function Home() {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Image style={styles.logo} source={{ uri: 'https://cdn.discordapp.com/attachments/901295847793360909/1030773806102482944/20221015_061053_0002-removebg-preview.png' }}  />
+        <Image style={styles.logo} source={{ uri: 'https://cdn.discordapp.com/attachments/901295847793360909/1031862122952523846/logo.png' }}  />
       </View>
       <ScrollView>
         <View style={styles.content}>
