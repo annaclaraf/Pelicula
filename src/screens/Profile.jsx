@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, Image, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
+import { View, Image, Text, Pressable, ScrollView, Alert, StyleSheet } from 'react-native';
 import { SignOut } from 'phosphor-react-native'
 
 import { useAuth } from '../hooks/useAuth'
@@ -10,10 +10,29 @@ import { MovieSlider } from '../components/MovieSlider'
 import moviesData from '../fakeDb.json'
 
 export function Profile() {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
   const [moviesWatched, setMoviesWatched] = useState([])
   const [moviesToWatch, setMoviesToWatch] = useState([])
+
+  async function handleSignOut() {
+    Alert.alert(
+      "Sair", "Tem certeza que deseja sair da sua conta?",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel"
+        },
+        { 
+          text: "Sair",
+          onPress: () => signOut()
+        }
+      ],
+      { 
+        cancelable: true 
+      }
+    );
+  }
 
   useEffect(() => {
     setMoviesWatched(moviesData)
@@ -25,7 +44,7 @@ export function Profile() {
       <ScrollView>
         <View style={styles.content}>
           <View style={styles.profileInfo}>
-            <Pressable style={styles.signOutButton}>
+            <Pressable style={styles.signOutButton} onPress={handleSignOut}>
               <SignOut color="#000000" size={26} />
             </Pressable>
             <View style={styles.avatar}>
