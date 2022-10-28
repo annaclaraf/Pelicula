@@ -2,17 +2,16 @@ import { useState, useEffect } from 'react';
 import { View, Image, Text, Pressable, ScrollView, StyleSheet } from 'react-native';
 import { SignOut } from 'phosphor-react-native'
 
+import { useAuth } from '../hooks/useAuth'
+
 import { Footer } from '../components/Footer'
 import { MovieSlider } from '../components/MovieSlider'
 
 import moviesData from '../fakeDb.json'
 
 export function Profile() {
-  const [user, setUser] = useState({
-    "id": 1,
-    "name": "Anna",
-    "avatar": "https://cdn.discordapp.com/attachments/901295847793360909/1027765749135179837/noprofileimg.png"
-  })
+  const { user } = useAuth();
+
   const [moviesWatched, setMoviesWatched] = useState([])
   const [moviesToWatch, setMoviesToWatch] = useState([])
 
@@ -30,7 +29,7 @@ export function Profile() {
               <SignOut color="#000000" size={26} />
             </Pressable>
             <View style={styles.avatar}>
-              <Image source={{ uri: user.avatar }} style={styles.avatarImg} />
+              <Image source={{ uri: user.photo }} style={styles.avatarImg} />
             </View>
             <Text style={styles.name}>{user.name}</Text>
 
