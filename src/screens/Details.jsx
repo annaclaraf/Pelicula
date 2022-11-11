@@ -4,17 +4,25 @@ import { useRoute, useNavigation } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient';
 import { CaretLeft } from 'phosphor-react-native';
 
+import { useAuth } from '../hooks/useAuth'
+
+import { moviesToWatchApi, moviesWatchedApi } from '../services/api'
+
 import { RelatedMovies } from '../components/RelatedMovies'
 import { MovieGenres } from '../components/MovieGenres'
 import { dateFormat } from '../utils/dateFormat'
 
 export function Details() {
+  const { user } = useAuth();
+
   const navigation = useNavigation();
   const route = useRoute()
 
   const [movie, setMovie] = useState({})
 
   const { movieId } = route.params
+
+  const userId =  user.id
 
   useEffect(() => {
     (async () => {
@@ -24,6 +32,14 @@ export function Details() {
       setMovie(response)
     })();
   }, [])
+
+  async function handleAddMovieToWatch() {
+    await moviesToWatchApi.post('/movies/watch', { movieId, userId })
+  }
+
+  async function handleAddMovieWatched() {
+    await moviesWatchedApi.post('/movies/watched', { movieId, userId })
+  }
 
   return (
     <View>
@@ -47,10 +63,10 @@ export function Details() {
             </View>
             <View style={styles.buttonsContainer}>
               <View style={styles.button}>
-                <Button title="Quero Assistir" color="#D5E1F1" />
+                <Button title="Quero Assistir" color="#D5E1F1" onPress={handleAddMovieToWatch} />
               </View>
               <View style={styles.button}>
-                <Button title="Assistido" color="#D5E1F1" />
+                <Button title="Assistido" color="#D5E1F1" onPress={handleAddMovieWatched} />
               </View>
             </View>
             {movie.overview && (

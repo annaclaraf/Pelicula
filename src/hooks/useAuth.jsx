@@ -2,8 +2,10 @@ import { createContext, useContext, useEffect, useState } from "react";
 import * as AuthSession from 'expo-auth-session';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const { CLIENT_ID } = process.env
-const { REDIRECT_URI } = process.env
+import { userApi } from '../services/api'
+
+const { CLIENT_ID } = process.env;
+const { REDIRECT_URI } = process.env;
 
 export const AuthContext = createContext({});
 
@@ -27,11 +29,14 @@ function AuthProvider({ children }) {
         const userLogged = {
           id: String(userInfo.id),
           name: userInfo.name,
-          given_name: userInfo.given_name,
+          givenName: userInfo.given_name,
           email: userInfo.email,
           photo: userInfo.picture
         }
         setUser(userLogged)
+
+        await userApi.post('/user', userLogged)
+
         await AsyncStorage.setItem(userStorageKey, JSON.stringify(userLogged));
       }
     } catch (error) {
