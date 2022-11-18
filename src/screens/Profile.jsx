@@ -4,16 +4,18 @@ import { SignOut } from 'phosphor-react-native'
 
 import { useAuth } from '../hooks/useAuth'
 
+import { AllMoviesToWatch, AllMoviesWatched } from '../utils/getAllMovies'
+
 import { Footer } from '../components/Footer'
 import { MovieSlider } from '../components/MovieSlider'
-
-import moviesData from '../fakeDb.json'
+import { EmptyList } from '../components/EmptyList'
 
 export function Profile() {
   const { user, signOut } = useAuth();
 
   const [moviesWatched, setMoviesWatched] = useState([])
   const [moviesToWatch, setMoviesToWatch] = useState([])
+  const [loading, setLoading] = useState(true)
 
   async function handleSignOut() {
     Alert.alert(
@@ -23,20 +25,32 @@ export function Profile() {
           text: "Cancelar",
           style: "cancel"
         },
-        { 
+        {
           text: "Sair",
           onPress: () => signOut()
         }
       ],
-      { 
-        cancelable: true 
+      {
+        cancelable: true
       }
     );
   }
 
+  async function AllMovies() {
+    const watched = await AllMoviesWatched(user);
+    const towatch = await AllMoviesToWatch(user);
+
+    setTimeout(() => {
+      setMoviesWatched(watched)
+      setMoviesToWatch(towatch)
+      setLoading(false)
+    }, 100);
+
+  }
+
   useEffect(() => {
-    setMoviesWatched(moviesData)
-    setMoviesToWatch(moviesData)
+    setLoading(true)
+    AllMovies()
   }, [])
 
   return (
@@ -72,9 +86,15 @@ export function Profile() {
 
           <View>
             <Text style={styles.title}>Filmes Assistidos</Text>
-            <MovieSlider data={moviesData} style={{ paddingHorizontal: 10 }} viewMoreMovies={true} title={'Filmes Assistidos'} />
+            {!loading && moviesWatched.length == 0 ?
+              <EmptyList /> :
+              <MovieSlider data={moviesWatched} style={{ paddingHorizontal: 10 }} viewMoreMovies={true} title={'Filmes Assistidos'} />
+            }
             <Text style={styles.title}>Filmes Para Assistir</Text>
-            <MovieSlider data={moviesData} style={{ paddingHorizontal: 10 }} viewMoreMovies={true} title={'Filmes Para Assistir'} />
+            {!loading && moviesToWatch.length == 0 ? 
+              <EmptyList /> : 
+              <MovieSlider data={moviesToWatch} style={{ paddingHorizontal: 10 }} viewMoreMovies={true} title={'Filmes Para Assistir'} />
+            }
           </View>
         </View>
       </ScrollView>
@@ -114,26 +134,26 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 20
   },
-  moviesInfos: { 
-    flexDirection: 'row', 
-    alignItems: 'center', 
+  moviesInfos: {
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
     maxWidth: '80%',
     marginVertical: 30
   },
-  moviesInfosSection: { 
-    flex: 1, 
-    alignItems: 'center', 
-    justifyContent: 'center', 
-    margin: 10 
+  moviesInfosSection: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10
   },
   moviesInfosText: {
     fontSize: 15
   },
-  divisorLine: { 
-    width: 2, 
-    height: 40, 
-    backgroundColor: 'gray' 
+  divisorLine: {
+    width: 2,
+    height: 40,
+    backgroundColor: 'gray'
   },
   title: {
     fontWeight: '700',

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { View, Text, Pressable, Image, ImageBackground, ScrollView, Button, StyleSheet } from 'react-native';
+import { View, Text, Pressable, Image, ImageBackground, ScrollView, StyleSheet } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient';
 import { CaretLeft } from 'phosphor-react-native';
@@ -10,6 +10,9 @@ import { moviesToWatchApi, moviesWatchedApi } from '../services/api'
 
 import { RelatedMovies } from '../components/RelatedMovies'
 import { MovieGenres } from '../components/MovieGenres'
+import { Toast } from '../components/Toast'
+import { Button } from '../components/Button'
+import { Loading } from '../components/Loading'
 import { dateFormat } from '../utils/dateFormat'
 
 export function Details() {
@@ -19,26 +22,81 @@ export function Details() {
   const route = useRoute()
 
   const [movie, setMovie] = useState({})
+  const [selected, setSelected] = useState('')
+  const [loading, setLoading] = useState(true)
 
   const { movieId } = route.params
 
-  const userId =  user.id
+  const userId = user.id
 
   useEffect(() => {
     (async () => {
+      setLoading(true)
       const response = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=17830acb428fca194205745d95c40ae4&language=pt-BR`, { method: "GET" })
         .then((res) => res.json())
 
       setMovie(response)
+
+      const res = await movieSelected();
+
+      setSelected(res)
+
+      setLoading(false)
+
     })();
   }, [])
 
+  async function movieSelected() {
+    const watched = await moviesWatchedApi.get(`/movies/watched/${userId}/${movieId}`).then(res => res.data)
+
+    if (watched) {
+      return 'watched'
+    }
+
+    const toWatch = await moviesToWatchApi.get(`/movies/watch/${userId}/${movieId}`).then(res => res.data)
+
+    if (toWatch) {
+      return 'toWatch'
+    }
+
+    return
+  }
+
   async function handleAddMovieToWatch() {
-    await moviesToWatchApi.post('/movies/watch', { movieId, userId })
+    setSelected('toWatch')
+    const res = await movieSelected();
+
+    if (res == 'toWatch') {
+      setSelected('')
+      Toast({ title: 'Filme Removido' })
+      await moviesToWatchApi.delete(`/movies/watch/${userId}/${movieId}`)
+      return
+    } else if (res == 'watched') {
+      await moviesWatchedApi.delete(`/movies/watched/${userId}/${movieId}`)
+      await moviesToWatchApi.post('/movies/watch', { movieId, userId })
+    } else {
+      await moviesToWatchApi.post('/movies/watch', { movieId, userId })
+    }
+
+    Toast({ title: 'Filme Adicionado' })
   }
 
   async function handleAddMovieWatched() {
-    await moviesWatchedApi.post('/movies/watched', { movieId, userId })
+    setSelected('watched')
+    const res = await movieSelected();
+
+    if (res == 'watched') {
+      setSelected('')
+      Toast({ title: 'Filme Removido' })
+      await moviesWatchedApi.delete(`/movies/watched/${userId}/${movieId}`)
+      return
+    } else if (res == 'toWatch') {
+      await moviesToWatchApi.delete(`/movies/watch/${userId}/${movieId}`)
+      await moviesWatchedApi.post('/movies/watched', { movieId, userId })
+    } else {
+      await moviesWatchedApi.post('/movies/watched', { movieId, userId })
+    }
+    Toast({ title: 'Filme Adicionado' })
   }
 
   return (
@@ -52,31 +110,37 @@ export function Details() {
             <ImageBackground style={styles.bannerImg} source={{ uri: `https://image.tmdb.org/t/p/original${movie.backdrop_path}` }}>
             </ImageBackground>
           </View>
+
           <View style={styles.content}>
-            <View style={styles.posterContainer}>
-              <Image style={styles.posterImg} source={{ uri: `https://image.tmdb.org/t/p/original${movie.poster_path}` }} />
-              <View style={styles.info}>
-                <Text style={styles.title}>{movie.title}</Text>
-                <Text style={styles.date}>{dateFormat(movie.release_date)}</Text>
-                <MovieGenres genres={movie.genres} />
-              </View>
-            </View>
-            <View style={styles.buttonsContainer}>
-              <View style={styles.button}>
-                <Button title="Quero Assistir" color="#D5E1F1" onPress={handleAddMovieToWatch} />
-              </View>
-              <View style={styles.button}>
-                <Button title="Assistido" color="#D5E1F1" onPress={handleAddMovieWatched} />
-              </View>
-            </View>
-            {movie.overview && (
+            {loading ? <Loading />  :
               <>
-                <Text style={styles.overviewTitle}>Sinopse</Text>
-                <Text style={styles.overview}>{movie.overview}</Text>
+                <View style={styles.posterContainer}>
+                  <Image style={styles.posterImg} source={{ uri: `https://image.tmdb.org/t/p/original${movie.poster_path}` }} />
+                  <View style={styles.info}>
+                    <Text style={styles.title}>{movie.title}</Text>
+                    <Text style={styles.date}>{dateFormat(movie.release_date)}</Text>
+                    <MovieGenres genres={movie.genres} />
+                  </View>
+                </View>
+                <View style={styles.buttonsContainer}>
+                  <View style={styles.button}>
+                    <Button text="Quero Assistir" onPress={handleAddMovieToWatch} selected={selected == 'toWatch'} />
+                  </View>
+                  <View style={styles.button}>
+                    <Button text="Assistido" onPress={handleAddMovieWatched} selected={selected == 'watched'} />
+                  </View>
+                </View>
+                {movie.overview && (
+                  <>
+                    <Text style={styles.overviewTitle}>Sinopse</Text>
+                    <Text style={styles.overview}>{movie.overview}</Text>
+                  </>
+                )}
+                <RelatedMovies movieId={movieId} />
               </>
-            )}
-            <RelatedMovies movieId={movieId} />
+            }
           </View>
+
         </View>
       </ScrollView>
     </View>
@@ -115,10 +179,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   posterImg: {
-     width: 120,
-     height: "100%",
-     resizeMode: 'cover', 
-     borderRadius: 20
+    width: 120,
+    height: "100%",
+    resizeMode: 'cover',
+    borderRadius: 20
   },
   info: {
     flex: 1,

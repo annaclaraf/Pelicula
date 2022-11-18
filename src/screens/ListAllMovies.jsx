@@ -4,10 +4,16 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient';
 import { CaretLeft } from 'phosphor-react-native';
 
+import { useAuth } from '../hooks/useAuth'
+
+import { AllMoviesToWatch, AllMoviesWatched } from '../utils/getAllMovies'
+
 export function ListAllMovies() {
+  const { user } = useAuth();
   const navigation = useNavigation();
   const route = useRoute()
-  const { movies, title } = route.params
+
+  const { title } = route.params
 
   const [allMovies, setAllMovies] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -21,8 +27,14 @@ export function ListAllMovies() {
     );
   };
 
-  const loadMovies = () => {
-    setAllMovies(movies)
+  
+  const loadMovies = async () => {
+    const list = title == 'Filmes Assistidos' ? 'watched' : 'toWatch'
+    const movies  = list == 'watched' ? await AllMoviesWatched(user) : await AllMoviesToWatch(user)
+    
+    setTimeout(() => {
+      setAllMovies(movies)
+    }, 100);
   }
 
   const refreshList = () => {
@@ -35,7 +47,7 @@ export function ListAllMovies() {
 
   useEffect(() => {
     loadMovies()
-  }, [movies])
+  }, [])
 
   return (
     <>
