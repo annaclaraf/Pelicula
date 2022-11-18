@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Image, FlatList, StyleSheet, Pressable } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
-import { Loading } from './Loading'
+import { LoadingMovie } from './LoadingMovie'
 import { ListFooter } from '../components/ListFooter'
 
 export function MovieSlider({ data, style, viewMoreMovies, title }) {
@@ -41,7 +41,7 @@ export function MovieSlider({ data, style, viewMoreMovies, title }) {
   };
 
   return (
-    loading ? <Loading/> : 
+    (loading || movies.length == 0 ) ? <LoadingMovie /> :
       <View>
         <FlatList
           data={movies}
@@ -66,8 +66,8 @@ const styles = StyleSheet.create({
     overflow: "hidden"
   },
   image: {
-    width: 140, 
-    height: "100%", 
+    width: 140,
+    height: "100%",
     resizeMode: 'cover'
   }
 });
