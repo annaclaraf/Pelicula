@@ -3,9 +3,8 @@ import { View, Image, FlatList, StyleSheet, Pressable } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import { LoadingMovie } from './LoadingMovie'
-import { ListFooter } from '../components/ListFooter'
 
-export function MovieSlider({ data, style, viewMoreMovies, title }) {
+export function MovieSlider({ data, style, viewMoreMovies }) {
   const navigation = useNavigation();
 
   const [movies, setMovies] = useState([]);
@@ -14,6 +13,8 @@ export function MovieSlider({ data, style, viewMoreMovies, title }) {
   const moviesData = viewMoreMovies ? data.slice(0,8) : data
 
   async function loadMovies(pagination = page) {
+    if(pagination > moviesData.length ) return 
+
     const response = await moviesData.slice(pagination, pagination+4)
     setMovies(movies => [...movies, ...response]);
 
@@ -47,7 +48,6 @@ export function MovieSlider({ data, style, viewMoreMovies, title }) {
           data={movies}
           renderItem={renderItem}
           showsHorizontalScrollIndicator={false}
-          ListFooterComponent={viewMoreMovies && movies.length == 8 && <ListFooter data={data} title={title} />}
           onEndReachedThreshold={0.1}
           onEndReached={() => loadMovies()}
           horizontal
