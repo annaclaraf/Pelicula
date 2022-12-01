@@ -27,6 +27,8 @@ export function Details() {
 
   const { movieId } = route.params
 
+  const poster_path = movie.poster_path
+
   const userId = user.id
 
   useEffect(() => {
@@ -73,11 +75,8 @@ export function Details() {
       return
     } else if (res == 'watched') {
       await moviesWatchedApi.delete(`/movies/watched/${userId}/${movieId}`)
-      await moviesToWatchApi.post('/movies/watch', { movieId, userId })
-    } else {
-      await moviesToWatchApi.post('/movies/watch', { movieId, userId })
-    }
-
+    } 
+    await moviesToWatchApi.post('/movies/watch', { id: movieId, userId, poster_path  })
     Toast({ title: 'Filme Adicionado' })
   }
 
@@ -92,10 +91,8 @@ export function Details() {
       return
     } else if (res == 'toWatch') {
       await moviesToWatchApi.delete(`/movies/watch/${userId}/${movieId}`)
-      await moviesWatchedApi.post('/movies/watched', { movieId, userId })
-    } else {
-      await moviesWatchedApi.post('/movies/watched', { movieId, userId })
-    }
+    } 
+    await moviesWatchedApi.post('/movies/watched', { id: movieId, userId, poster_path })
     Toast({ title: 'Filme Adicionado' })
   }
 
