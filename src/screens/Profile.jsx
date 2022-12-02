@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { View, Image, Text, Pressable, ScrollView, Alert, StyleSheet } from 'react-native';
 import { SignOut } from 'phosphor-react-native'
 
+import { useIsFocused } from '@react-navigation/native';
+
 import { useAuth } from '../hooks/useAuth'
 
 import { AllMoviesToWatch, AllMoviesWatched } from '../utils/getAllMovies'
@@ -13,6 +15,8 @@ import { ViewMore } from '../components/ViewMore'
 
 export function Profile() {
   const { user, signOut } = useAuth();
+
+  const isFocused = useIsFocused();
 
   const [moviesWatched, setMoviesWatched] = useState([])
   const [moviesToWatch, setMoviesToWatch] = useState([])
@@ -50,7 +54,7 @@ export function Profile() {
   useEffect(() => {
     setLoading(true)
     AllMovies()
-  }, [])
+  }, [isFocused])
 
   return (
     <>

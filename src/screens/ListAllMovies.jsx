@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Image, FlatList, Text, StyleSheet, Pressable } from 'react-native'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute, useIsFocused } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient';
 import { CaretLeft } from 'phosphor-react-native';
 
@@ -11,6 +11,7 @@ import { AllMoviesToWatch, AllMoviesWatched } from '../utils/getAllMovies'
 export function ListAllMovies() {
   const { user } = useAuth();
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const route = useRoute()
 
   const { title } = route.params
@@ -47,7 +48,7 @@ export function ListAllMovies() {
 
   useEffect(() => {
     loadMovies()
-  }, [])
+  }, [isFocused])
 
   return (
     <>
