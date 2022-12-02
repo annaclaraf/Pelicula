@@ -9,6 +9,7 @@ import { AllMoviesToWatch, AllMoviesWatched } from '../utils/getAllMovies'
 import { Footer } from '../components/Footer'
 import { MovieSlider } from '../components/MovieSlider'
 import { EmptyList } from '../components/EmptyList'
+import { ViewMore } from '../components/ViewMore'
 
 export function Profile() {
   const { user, signOut } = useAuth();
@@ -40,11 +41,9 @@ export function Profile() {
     const watched = await AllMoviesWatched(user);
     const towatch = await AllMoviesToWatch(user);
 
-    setTimeout(() => {
-      setMoviesWatched(watched)
-      setMoviesToWatch(towatch)
-      setLoading(false)
-    }, 100);
+    setMoviesWatched(watched)
+    setMoviesToWatch(towatch)
+    setLoading(false)
 
   }
 
@@ -85,15 +84,22 @@ export function Profile() {
           </View>
 
           <View>
-            <Text style={styles.title}>Filmes Assistidos</Text>
-            {!loading && moviesWatched.length == 0 ?
-              <EmptyList /> :
-              <MovieSlider data={moviesWatched} style={{ paddingHorizontal: 10 }} viewMoreMovies={true} title={'Filmes Assistidos'} />
-            }
-            <Text style={styles.title}>Filmes Para Assistir</Text>
+            <View style={styles.heading}>
+              <Text style={styles.title}>Filmes Para Assistir</Text>
+              { moviesToWatch.length > 0 && <ViewMore title="Filmes Para Assistir" />}
+            </View>
             {!loading && moviesToWatch.length == 0 ? 
               <EmptyList /> : 
-              <MovieSlider data={moviesToWatch} style={{ paddingHorizontal: 10 }} viewMoreMovies={true} title={'Filmes Para Assistir'} />
+              <MovieSlider data={moviesToWatch} style={{ paddingHorizontal: 10 }} viewMoreMovies={true} />
+            }
+
+            <View style={styles.heading}>
+              <Text style={styles.title}>Filmes Assistidos</Text>
+              { moviesWatched.length > 0 && <ViewMore title="Filmes Assistidos" /> }
+            </View>
+            {!loading && moviesWatched.length == 0 ?
+              <EmptyList /> :
+              <MovieSlider data={moviesWatched} style={{ paddingHorizontal: 10 }} viewMoreMovies={true} />
             }
           </View>
         </View>
@@ -154,6 +160,11 @@ const styles = StyleSheet.create({
     width: 2,
     height: 40,
     backgroundColor: 'gray'
+  },
+  heading: {
+    flex: 1, 
+    flexDirection: "row", 
+    justifyContent: "space-between"
   },
   title: {
     fontWeight: '700',
